@@ -13,26 +13,32 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace window_resolutioner.Controls
-{
-    /// <summary>
-    /// Interaktionslogik für WindowEditor.xaml
-    /// </summary>
-    public partial class WindowEditor : UserControl
-    {
-        public Klassen.Position? Position { get; set; } = null;
+namespace window_resolutioner.Controls {
+  /// <summary>
+  /// Interaktionslogik für WindowEditor.xaml
+  /// </summary>
+  public partial class WindowEditor : UserControl {
+    public Klassen.Position? Position { get; set; } = null;
 
-        public WindowEditor()
-        {
-            InitializeComponent();
-        }
-
-        private void SetPosBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (Position != null)
-            {
-                Position.FindMatchingWindows().ForEach(h => Position.SetPosition(h));
-            }
-        }
+    public WindowEditor() {
+      InitializeComponent();
     }
+
+    private void SetPosBtn_Click(object sender, RoutedEventArgs e) {
+      if (Position != null) {
+        IntPtr activeWindow = Klassen.WindowData.GetActiveWindow();
+        Position.FindMatchingWindows().ForEach(
+          h => {
+            Position.SetPosition(h);
+            if (Position.removeBorder) {
+              Position.SetWindowBorder(h, false);
+            } else {
+              Position.SetWindowBorder(h, true);
+            }
+          }
+        );
+        Klassen.WindowData.forceSetForegroundWindow(activeWindow);
+      }
+    }
+  }
 }

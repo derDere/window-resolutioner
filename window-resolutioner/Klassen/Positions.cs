@@ -57,13 +57,14 @@ namespace window_resolutioner.Klassen {
     public int width { get; set; } = 50;
     public int height { get; set; } = 50;
     public bool active { get; set; } = false;
+    public bool removeBorder { get; set; } = false;
 
     public override string ToString() {
       return Name;
     }
 
     [DllImport("user32.dll")]
-    public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+    static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
     public struct Rect {
       public int Left { get; set; }
@@ -100,8 +101,8 @@ namespace window_resolutioner.Klassen {
 
       int x = X;
       int y = Y;
-      int cx = x + width;
-      int cy = y + height;
+      int cx = width;
+      int cy = height;
       SetWindowPos(handle, IntPtr.Zero, x, y, cx, cy, 0);
     }
 
@@ -116,6 +117,48 @@ namespace window_resolutioner.Klassen {
         }
       }
       return handles;
+    }
+
+
+    //Gets window attributes
+    [DllImport("USER32.DLL")]
+    static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+    //Sets window attributes
+    [DllImport("USER32.DLL")]
+    static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+    public void SetWindowBorder(IntPtr windowHandle, bool borderOn) {
+      if (windowHandle == IntPtr.Zero) {
+        return;
+      }
+
+      int GWL_STYLE = -16;
+      int WS_BORDER = 0x00800000;
+      int WS_CAPTION = 0x00C00000;
+      int WS_SYSMENU = 0x00080000;
+      int WS_THICKFRAME = 0x00040000;
+      int WS_MINIMIZE = 0x20000000;
+      int WS_MAXIMIZEBOX = 0x00010000;
+
+      int lCurStyle = GetWindowLong(windowHandle, GWL_STYLE);
+      if (borderOn) {
+        lCurStyle |= WS_BORDER;
+        lCurStyle |= WS_CAPTION;
+        lCurStyle |= WS_SYSMENU;
+        lCurStyle |= WS_THICKFRAME;
+        lCurStyle |= WS_MINIMIZE;
+        lCurStyle |= WS_MAXIMIZEBOX;
+      }
+      else {
+        lCurStyle &= ~WS_BORDER;
+        lCurStyle &= ~WS_CAPTION;
+        lCurStyle &= ~WS_SYSMENU;
+        lCurStyle &= ~WS_THICKFRAME;
+        lCurStyle &= ~WS_MINIMIZE;
+        lCurStyle &= ~WS_MAXIMIZEBOX;
+      }
+      SetWindowLong(windowHandle, GWL_STYLE, lCurStyle);
     }
   }
 }

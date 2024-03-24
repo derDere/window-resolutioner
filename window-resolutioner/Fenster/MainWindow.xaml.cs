@@ -27,19 +27,25 @@ namespace window_resolutioner {
       ticker.Tick += Ticker_Tick;
       Store.Positions.LoadPositions();
       Store.LoadWindows();
-      //this.GetBindingExpression(DataContextProperty)?.UpdateTarget();
+      Store.Positions.PositionList = Store.Positions.PositionList.ToArray().ToList();
+      SavedWindowPositions.GetBindingExpression(ListBox.ItemsSourceProperty)?.UpdateTarget();
     }
 
     private void Ticker_Tick(object sender, EventArgs e) {
       ticker.Stop();
 
+      IntPtr activeWindow = Klassen.WindowData.GetActiveWindow();
       Store.Positions.PositionList.ForEach(p => {
         if (p.active) {
           p.FindMatchingWindows().ForEach(h => {
             p.SetPosition(h);
+            if (p.removeBorder) {
+              p.SetWindowBorder(h, false);
+            }
           });
         }
       });
+      Klassen.WindowData.forceSetForegroundWindow(activeWindow);
 
       ticker.Start();
     }
@@ -50,7 +56,7 @@ namespace window_resolutioner {
       }
       Klassen.Position position = new Klassen.Position {
         Name = Store.WindowDatas.SelectedWindow.Title,
-        Pattern = Regex.Escape(Store.WindowDatas.SelectedWindow.Title)
+        Pattern = "^(" + Regex.Escape(Store.WindowDatas.SelectedWindow.Title) + ")$"
       };
       position.GetPositionFromHandle(Store.WindowDatas.SelectedWindow.Handle);
       Store.Positions.PositionList.Add(position);

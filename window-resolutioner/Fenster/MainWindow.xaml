@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:window_resolutioner"
         xmlns:Controls="clr-namespace:window_resolutioner.Controls" x:Class="window_resolutioner.MainWindow" x:Name="Win"
         mc:Ignorable="d" DataContext="{Binding Store, ElementName=Win}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -21,6 +21,9 @@
         </Grid.ColumnDefinitions>
 
         <Rectangle Grid.ColumnSpan="5" Fill="#F0F0F0"/>
+        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center">All open windows</ContentControl>
+        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">Saved window positions</ContentControl>
+        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">Properties</ContentControl>
 
         <ListBox x:Name="OpenWindowsLB" Grid.Row="1" ItemsSource="{Binding WindowDatas.Windows}" SelectedIndex="{Binding WindowDatas.SelectedIndex}"/>
         <ListBox x:Name="SavedWindowPositions" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Positions.PositionList}" SelectedIndex="{Binding Positions.SelectedIndex}" SelectionChanged="SavedWindowPositions_SelectionChanged"/>

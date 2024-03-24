@@ -19,6 +19,8 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -34,7 +36,8 @@
         <ContentControl Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">Width:</ContentControl>
         <ContentControl Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">Height:</ContentControl>
 
-        <ContentControl Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">Active:</ContentControl>
+        <ContentControl Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">Remove Border:</ContentControl>
+        <ContentControl Grid.Row="12" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 0">Active:</ContentControl>
 
         <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Name}"/>
         <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Pattern}"/>
@@ -44,8 +47,9 @@
         <TextBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding width}"/>
         <TextBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding height}"/>
 
-        <CheckBox Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 2 30 2" IsChecked="{Binding active}"/>
+        <CheckBox Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 2 30 2" IsChecked="{Binding removeBorder}"/>
+        <CheckBox Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 2 30 2" IsChecked="{Binding active}"/>
 
-        <Button x:Name="SetPosBtn" Click="SetPosBtn_Click" Grid.Row="11" Grid.Column="1" Padding="20 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Content="Set Window Pos"/>
+        <Button x:Name="SetPosBtn" Click="SetPosBtn_Click" Grid.Row="13" Grid.Column="1" Padding="20 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Content="Set Window Pos"/>
     </Grid>
 </UserControl>
