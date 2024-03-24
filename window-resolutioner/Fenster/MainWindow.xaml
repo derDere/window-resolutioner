@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:window_resolutioner"
         xmlns:Controls="clr-namespace:window_resolutioner.Controls" x:Class="window_resolutioner.MainWindow" x:Name="Win"
         mc:Ignorable="d" DataContext="{Binding Store, ElementName=Win}"
-        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
+        Title="Window Resolutioner" Height="450" Width="800" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
