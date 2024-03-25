@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace window_resolutioner {
     private DispatcherTimer ticker = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1), IsEnabled = true };
 
     public Klassen.Store Store { get; set; } = new Klassen.Store();
+
+    private bool closeForReal = false;
 
     public MainWindow() {
       InitializeComponent();
@@ -65,7 +68,7 @@ namespace window_resolutioner {
     }
 
     private void RemoveWindowPosition_Click(object sender, RoutedEventArgs e) {
-      if (MessageBox.Show("Wirklich löschen?", "Löschen", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+      if (MessageBox.Show("Are you shure you want to delete this positioning?", "Delete?", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
         if (Store.Positions.SelectedIndex != -1) {
           Store.Positions.PositionList.RemoveAt(Store.Positions.SelectedIndex);
           Store.Positions.PositionList = Store.Positions.PositionList.ToArray().ToList();
@@ -91,6 +94,26 @@ namespace window_resolutioner {
       Store.LoadWindows();
       Store.WindowDatas.Windows = Store.WindowDatas.Windows.ToArray().ToList();
       OpenWindowsLB.GetBindingExpression(ListBox.ItemsSourceProperty)?.UpdateTarget();
+    }
+
+    private void WindowEditor_DisplayChanged(object sender, EventArgs e) {
+      Store.Positions.PositionList = Store.Positions.PositionList.ToArray().ToList();
+      SavedWindowPositions.GetBindingExpression(ListBox.ItemsSourceProperty)?.UpdateTarget();
+    }
+
+    protected override void OnClosing(CancelEventArgs e) {
+      if (!this.closeForReal) {
+        e.Cancel = true;
+        this.WindowState = WindowState.Minimized;
+      }
+      base.OnClosing(e);
+    }
+
+    private void CloseBtn_Click(object sender, RoutedEventArgs e) {
+      if (MessageBox.Show("Are you shure you want to close the application?\n\nThe Resolutioner won't automaticaly update your windows if its closed!", "Close?", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+        this.closeForReal = true;
+        this.Close();
+      }
     }
   }
 }

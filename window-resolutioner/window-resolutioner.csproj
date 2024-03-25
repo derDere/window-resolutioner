@@ -12,11 +12,35 @@
 
   <ItemGroup>
     <None Remove="Fenster\icon.ico" />
+    <None Remove="Resources\applications_blue.png" />
+    <None Remove="Resources\application_blue.png" />
+    <None Remove="Resources\application_resize.png" />
+    <None Remove="Resources\arrow.png" />
+    <None Remove="Resources\arrow_180.png" />
+    <None Remove="Resources\arrow_circle_double.png" />
+    <None Remove="Resources\control_power_green.png" />
+    <None Remove="Resources\control_power_red.png" />
+    <None Remove="Resources\cross.png" />
+    <None Remove="Resources\drive_download.png" />
+    <None Remove="Resources\drive_upload.png" />
+    <None Remove="Resources\equalizer__pencil.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Fenster\icon.ico" />
     <Resource Include="icon.ico" />
+    <Resource Include="Resources\applications_blue.png" />
+    <Resource Include="Resources\application_blue.png" />
+    <Resource Include="Resources\application_resize.png" />
+    <Resource Include="Resources\arrow.png" />
+    <Resource Include="Resources\arrow_180.png" />
+    <Resource Include="Resources\arrow_circle_double.png" />
+    <Resource Include="Resources\control_power_green.png" />
+    <Resource Include="Resources\control_power_red.png" />
+    <Resource Include="Resources\cross.png" />
+    <Resource Include="Resources\drive_download.png" />
+    <Resource Include="Resources\drive_upload.png" />
+    <Resource Include="Resources\equalizer__pencil.png" />
   </ItemGroup>
 
   <ItemGroup>

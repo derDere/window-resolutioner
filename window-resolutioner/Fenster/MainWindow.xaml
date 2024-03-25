@@ -1,33 +1,78 @@
-﻿<Window
+﻿<Window x:Name="Win"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:window_resolutioner"
-        xmlns:Controls="clr-namespace:window_resolutioner.Controls" x:Class="window_resolutioner.MainWindow" x:Name="Win"
-        mc:Ignorable="d" DataContext="{Binding Store, ElementName=Win}"
-        Title="Window Resolutioner" Height="450" Width="800" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
+        xmlns:Controls="clr-namespace:window_resolutioner.Controls"
+        xmlns:Klassen="clr-namespace:window_resolutioner.Klassen"
+        x:Class="window_resolutioner.MainWindow"
+        mc:Ignorable="d"
+        DataContext="{Binding Store, ElementName=Win}" UseLayoutRounding="True"
+        Title="Window Resolutioner"
+        Background="#FFFCFCFC"
+        Height="600" Width="1200" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" MinWidth="100"/>
             <ColumnDefinition Width="34"/>
             <ColumnDefinition Width="1*" MinWidth="100"/>
             <ColumnDefinition Width="4"/>
-            <ColumnDefinition Width="1*" MinWidth="100"/>
+            <ColumnDefinition Width="300" MinWidth="100"/>
         </Grid.ColumnDefinitions>
 
         <Rectangle Grid.ColumnSpan="5" Fill="#F0F0F0"/>
-        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center">All open windows</ContentControl>
-        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">Saved window positions</ContentControl>
-        <ContentControl VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">Properties</ContentControl>
+        <Rectangle Grid.Row="2" Grid.ColumnSpan="5" Fill="#F0F0F0"/>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/applications_blue.png"/>
+            <ContentControl>All open windows</ContentControl>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
+            <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/application_resize.png"/>
+            <ContentControl>Saved window positions</ContentControl>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">
+            <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/equalizer__pencil.png"/>
+            <ContentControl>Properties</ContentControl>
+        </StackPanel>
 
-        <ListBox x:Name="OpenWindowsLB" Grid.Row="1" ItemsSource="{Binding WindowDatas.Windows}" SelectedIndex="{Binding WindowDatas.SelectedIndex}"/>
-        <ListBox x:Name="SavedWindowPositions" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Positions.PositionList}" SelectedIndex="{Binding Positions.SelectedIndex}" SelectionChanged="SavedWindowPositions_SelectionChanged"/>
-        <Controls:WindowEditor x:Name="WindowEditor" Grid.Column="4" Grid.Row="1"/>
+        <ListBox x:Name="OpenWindowsLB" Grid.Row="1" ItemsSource="{Binding WindowDatas.Windows}" SelectedIndex="{Binding WindowDatas.SelectedIndex}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="Klassen:WindowData">
+                    <StackPanel Orientation="Horizontal">
+                        <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/application_blue.png"/>
+                        <ContentControl Content="{Binding Title}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox x:Name="SavedWindowPositions" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Positions.PositionList}" SelectedIndex="{Binding Positions.SelectedIndex}" SelectionChanged="SavedWindowPositions_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="Klassen:Position">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Name="PowerOn" UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/control_power_green.png" Visibility="Collapsed"/>
+                        <Image Name="PowerOff" UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/control_power_red.png" Visibility="Collapsed"/>
+                        <ContentControl Content="{Binding Name}"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding active}" Value="True">
+                            <Setter TargetName="PowerOn" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="PowerOff" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding active}" Value="False">
+                            <Setter TargetName="PowerOn" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="PowerOff" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Controls:WindowEditor x:Name="WindowEditor" Grid.Column="4" Grid.Row="1" DisplayChanged="WindowEditor_DisplayChanged"/>
 
         <StackPanel Grid.Column="1" Margin="7 0" VerticalAlignment="Center" Grid.Row="1">
             <StackPanel.Resources>
@@ -37,12 +82,29 @@
                     <Setter Property="Height" Value="20"/>
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="ReloadWindowsBtn" Content="R" Click="ReloadWindowsBtn_Click" ToolTip="Reload Window List"/>
-            <Button x:Name="SaveWindowPosition" Content="▶" Click="SaveWindowPosition_Click" ToolTip="Create New Position"/>
-            <Button x:Name="RemoveWindowPosition" Content="◀" Click="RemoveWindowPosition_Click" ToolTip="Remove Selected Position"/>
-            <Button x:Name="SaveBtn" Content="🔽" Click="SaveBtn_Click" ToolTip="Save Positions"/>
-            <Button x:Name="ReloadBtn" Content="🔼" Click="ReloadBtn_Click" ToolTip="Reload Positions"/>
+            <Button x:Name="ReloadWindowsBtn" Click="ReloadWindowsBtn_Click" ToolTip="Reload Window List">
+                <Image UseLayoutRounding="True" Source="/Resources/arrow_circle_double.png" Width="16" Height="16"/>
+            </Button>
+            <Button x:Name="SaveWindowPosition" Click="SaveWindowPosition_Click" ToolTip="Create New Position">
+                <Image UseLayoutRounding="True" Source="/Resources/arrow.png" Width="16" Height="16"/>
+            </Button>
+            <Button x:Name="RemoveWindowPosition" Click="RemoveWindowPosition_Click" ToolTip="Remove Selected Position">
+                <Image UseLayoutRounding="True" Source="/Resources/arrow_180.png" Width="16" Height="16"/>
+            </Button>
+            <Button x:Name="SaveBtn" Click="SaveBtn_Click" ToolTip="Save Positions">
+                <Image UseLayoutRounding="True" Source="/Resources/drive_download.png" Width="16" Height="16"/>
+            </Button>
+            <Button x:Name="ReloadBtn" Click="ReloadBtn_Click" ToolTip="Reload Positions">
+                <Image UseLayoutRounding="True" Source="/Resources/drive_upload.png" Width="16" Height="16"/>
+            </Button>
         </StackPanel>
+
+        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Grid.Row="2" Padding="20 2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4 0">
+            <StackPanel Orientation="Horizontal">
+                <Image UseLayoutRounding="True" Source="/Resources/cross.png" Width="16" Height="16" Margin="0 0 10 0"/>
+                <ContentControl>Close Application</ContentControl>
+            </StackPanel>
+        </Button>
 
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" ResizeBehavior="PreviousAndNext"/>
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" ResizeBehavior="PreviousAndNext"/>

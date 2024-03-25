@@ -18,6 +18,9 @@ namespace window_resolutioner.Controls {
   /// Interaktionslogik für WindowEditor.xaml
   /// </summary>
   public partial class WindowEditor : UserControl {
+
+    public event EventHandler<EventArgs> DisplayChanged;
+
     public Klassen.Position? Position { get; set; } = null;
 
     public WindowEditor() {
@@ -39,6 +42,14 @@ namespace window_resolutioner.Controls {
         );
         Klassen.WindowData.forceSetForegroundWindow(activeWindow);
       }
+    }
+
+    private void NameTxb_TextChanged(object sender, TextChangedEventArgs e) {
+      DisplayChanged?.Invoke(this, new EventArgs());
+    }
+
+    private void ActiveCB_CheckedChange(object sender, RoutedEventArgs e) {
+      DisplayChanged?.Invoke(this, new EventArgs());
     }
   }
 }
