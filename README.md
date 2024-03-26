@@ -22,7 +22,7 @@ The motivation behind Window Resolutioner stemmed from the challenge of managing
 
 ## Installation
 
-1. Download the MSI setup file from the releases page.
+1. Download the MSI setup file from the [RELEASES](https://github.com/derDere/window-resolutioner/releases/) page.
 2. Run the setup wizard and follow the on-screen instructions to install Window Resolutioner on your system.
 
 ## Usage
