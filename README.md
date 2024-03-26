@@ -41,3 +41,9 @@ Window Resolutioner is released under the GNU GENERAL PUBLIC LICENSE Version 3. 
 ## Contributing
 
 Window Resolutioner is an open-source project hosted on GitHub. Contributions are welcome in the form of bug reports, feature suggestions, or code contributions. Please refer to the [CONTRIBUTING](CONTRIBUTING.md) file for more information on how to contribute.
+
+## Example Usage
+
+In the following photo is an example where this tool is used to force the game "Portal Knight" into a borderless "fullscreen"-mode that only take two thirds of the screen. It is done by configuring the game to just run in windowed mode. That means it will be a bordered window with a fixed size. The tool is now configured to look for all windows that match the pattern '''^(Portal\ Knights)$''' and then for all matching windows to remove the window border and place it at X: 1700, Y: 40 with a Width: 3440 and a Height: 1400. Now the positioning is activated and saved by the '''Save Positions''' button. (Its the second to bottom button in the central button column.) From now on if the Window-Resolutioner is running the game "Portal Knights" will always be resized to this position of the screen.
+
+![Example](example.png)
