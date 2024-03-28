@@ -14,6 +14,10 @@ The motivation behind Window Resolutioner stemmed from the challenge of managing
 - Automatic window management: Window Resolutioner continuously monitors and adjusts window positions based on user-defined settings, ensuring a consistent layout during usage.
 - Regex pattern matching: Users can specify window titles or parts of titles using regex patterns, enabling precise targeting of windows for positioning adjustments.
 - Border removal option: Users have the option to remove window borders for a cleaner and more streamlined appearance.
+- Minimize to Tray
+- Start Minimized
+- Start on System Startup
+- Position Preview
 
 ## System Requirements
 

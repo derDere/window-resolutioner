@@ -22,9 +22,11 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="140"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
@@ -42,14 +44,15 @@
         <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Name}" TextChanged="NameTxb_TextChanged"/>
         <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Pattern}"/>
 
-        <TextBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding X}"/>
-        <TextBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Y}"/>
-        <TextBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding width}"/>
-        <TextBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding height}"/>
+        <TextBox ToolTip="use mouse wheel" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding X}" MouseWheel="TextBox_MouseWheel" PreviewMouseWheel="TextBox_MouseWheel"/>
+        <TextBox ToolTip="use mouse wheel" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding Y}" MouseWheel="TextBox_MouseWheel" PreviewMouseWheel="TextBox_MouseWheel"/>
+        <TextBox ToolTip="use mouse wheel" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding width}" MouseWheel="TextBox_MouseWheel" PreviewMouseWheel="TextBox_MouseWheel"/>
+        <TextBox ToolTip="use mouse wheel" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="10 2 30 2" Text="{Binding height}" MouseWheel="TextBox_MouseWheel" PreviewMouseWheel="TextBox_MouseWheel"/>
 
         <CheckBox Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 2 30 2" IsChecked="{Binding removeBorder}"/>
         <CheckBox Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 2 30 2" IsChecked="{Binding active}" Checked="ActiveCB_CheckedChange"  Unchecked="ActiveCB_CheckedChange"/>
 
-        <Button x:Name="SetPosBtn" Click="SetPosBtn_Click" Grid.Row="13" Grid.Column="1" Padding="20 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Content="Set Window Pos"/>
+        <ToggleButton x:Name="ShowPreviewTBtn" Grid.Column="0" Grid.Row="14" Padding="20 3" Margin="10 2 0 2" Content="Show Preview" Checked="ShowPreviewTBtn_CheckedChange" Unchecked="ShowPreviewTBtn_CheckedChange"/>
+        <Button x:Name="SetPosBtn" Grid.Row="15" Grid.Column="0" Padding="20 3" Margin="10 2 0 2" Content="Set Window Pos" Click="SetPosBtn_Click"/>
     </Grid>
 </UserControl>

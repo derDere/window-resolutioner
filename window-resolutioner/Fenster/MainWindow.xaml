@@ -10,7 +10,7 @@
         DataContext="{Binding Store, ElementName=Win}" UseLayoutRounding="True"
         Title="Window Resolutioner"
         Background="#FFFCFCFC"
-        Height="600" Width="1200" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico">
+        Height="600" Width="1200" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -99,12 +99,18 @@
             </Button>
         </StackPanel>
 
-        <Button x:Name="CloseBtn" Click="CloseBtn_Click" Grid.Row="2" Padding="20 2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4 0">
-            <StackPanel Orientation="Horizontal">
-                <Image UseLayoutRounding="True" Source="/Resources/cross.png" Width="16" Height="16" Margin="0 0 10 0"/>
-                <ContentControl>Close Application</ContentControl>
-            </StackPanel>
-        </Button>
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal" Grid.ColumnSpan="5">
+            <Button x:Name="CloseBtn" Click="CloseBtn_Click" Padding="20 2" Margin="4 0 20 0">
+                <StackPanel Orientation="Horizontal">
+                    <Image UseLayoutRounding="True" Source="/Resources/cross.png" Width="16" Height="16" Margin="0 0 10 0"/>
+                    <ContentControl>Close Application</ContentControl>
+                </StackPanel>
+            </Button>
+
+            <CheckBox x:Name="StartMinimizedCB" Content="Start Minimized" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 20 0" IsChecked="{Binding Positions.StartMinimized}"/>
+            <CheckBox x:Name="MinimizeToTrayCB" Content="Minimize to Tray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 20 0" IsChecked="{Binding Positions.MinimizeToTray}"/>
+            <CheckBox x:Name="AutostartCB" Content="Run on Systemstart" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 20 0" Checked="AutostartCB_CheckedChange" Unchecked="AutostartCB_CheckedChange"/>
+        </StackPanel>
 
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" ResizeBehavior="PreviousAndNext"/>
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" ResizeBehavior="PreviousAndNext"/>

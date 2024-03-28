@@ -8,11 +8,19 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using IO = System.IO;
+using MessageBox = System.Windows.MessageBox;
 
 namespace window_resolutioner.Klassen {
   public class Positions {
+
     public List<Position> PositionList { get; set; } = new List<Position>();
+    public bool StartMinimized { get; set; } = false;
+    public bool MinimizeToTray { get; set; } = false;
+
+    [Newtonsoft.Json.JsonIgnore]
     public int SelectedIndex { get; set; } = -1;
+
+    [Newtonsoft.Json.JsonIgnore]
     public Position? SelectedPosition => SelectedIndex >= 0 ? PositionList[SelectedIndex] : null;
 
     private string GetFileName() {
@@ -29,7 +37,10 @@ namespace window_resolutioner.Klassen {
       if (IO.File.Exists(path)) {
         try {
           string json = IO.File.ReadAllText(path);
-          PositionList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Position>>(json) ?? new List<Position>();
+          Positions obj = Newtonsoft.Json.JsonConvert.DeserializeObject<Positions>(json) ?? new Positions();
+          PositionList = obj.PositionList;
+          StartMinimized = obj.StartMinimized;
+          MinimizeToTray = obj.MinimizeToTray;
         }
         catch (Exception ex) {
           MessageBox.Show(ex.Message);
@@ -40,7 +51,7 @@ namespace window_resolutioner.Klassen {
     public void SavePositions() {
       string path = GetFileName();
       try {
-        string json = Newtonsoft.Json.JsonConvert.SerializeObject(PositionList);
+        string json = Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         IO.File.WriteAllText(path, json);
       }
       catch (Exception ex) {
