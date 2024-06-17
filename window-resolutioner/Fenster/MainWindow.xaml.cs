@@ -21,6 +21,7 @@ using NotifyIcon = System.Windows.Forms.NotifyIcon;
 using Window = System.Windows.Window;
 using CheckBox = System.Windows.Controls.CheckBox;
 using Shortcut = ShellLink.Shortcut;
+using System.Data;
 
 namespace window_resolutioner {
   /// <summary>
@@ -39,7 +40,7 @@ namespace window_resolutioner {
     public MainWindow() {
       InitializeComponent();
       // Get Icon File from WPF Resources
-      using(IO.MemoryStream mem = new IO.MemoryStream(Properties.Resources.icon)) {
+      using (IO.MemoryStream mem = new IO.MemoryStream(Properties.Resources.icon)) {
         System.Drawing.Icon icon = new System.Drawing.Icon(mem);
         notifyIcon.Icon = icon;
       }
@@ -78,7 +79,8 @@ namespace window_resolutioner {
           this.ShowInTaskbar = false;
           this.notifyIcon.Visible = true;
         }
-      } else {
+      }
+      else {
         this.ShowInTaskbar = true;
         this.notifyIcon.Visible = false;
       }
@@ -89,6 +91,7 @@ namespace window_resolutioner {
       ticker.Stop();
 
       IntPtr activeWindow = Klassen.WindowData.GetActiveWindow();
+      bool handledAmbientWindows = false;
       Store.Positions.PositionList.ForEach(p => {
         if (p.active) {
           p.FindMatchingWindows().ForEach(h => {
@@ -96,9 +99,15 @@ namespace window_resolutioner {
             if (p.removeBorder) {
               p.SetWindowBorder(h, false);
             }
+            p.SetAmbientWindows(activeWindow, h, ref handledAmbientWindows);
           });
         }
       });
+      if (!handledAmbientWindows) {
+        foreach (System.Windows.Forms.Form f in Position.ambientWindowList) {
+          f.Close();
+        }
+      }
       Klassen.WindowData.forceSetForegroundWindow(activeWindow);
 
       ticker.Start();
@@ -131,6 +140,7 @@ namespace window_resolutioner {
     private void SavedWindowPositions_SelectionChanged(object sender, SelectionChangedEventArgs e) {
       WindowEditor.Position = Store.Positions.SelectedPosition;
       WindowEditor.GetBindingExpression(DataContextProperty)?.UpdateTarget();
+      AmbientWindowsDataGrid.DataContext = Store.Positions.SelectedPosition?.ambientWindows;
     }
 
     private void SaveBtn_Click(object sender, RoutedEventArgs e) {
@@ -188,7 +198,8 @@ namespace window_resolutioner {
       string shortcutPath = getAutostartLnkPath();
       if (IO.File.Exists(shortcutPath)) {
         return true;
-      } else {
+      }
+      else {
         return false;
       }
     }
@@ -213,6 +224,54 @@ namespace window_resolutioner {
       }
       catch (Exception ex) {
         MessageBox.Show("Error: " + ex.Message);
+      }
+    }
+
+    private void AmbientWindowsDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e) {
+      if (e.PropertyType == typeof(System.Windows.Media.Color)) {
+        DataGridTemplateColumn c = new DataGridTemplateColumn() {
+          CellTemplate = (DataTemplate)Resources["ColorTemplate"],
+          Header = e.Column.Header,
+          HeaderTemplate = e.Column.HeaderTemplate,
+          HeaderStringFormat = e.Column.HeaderStringFormat,
+          SortMemberPath = e.PropertyName,
+        };
+        e.Column = c;
+      }
+    }
+
+    private void ColorButton_Click(object sender, RoutedEventArgs e) {
+      System.Windows.Controls.Button btn = sender as System.Windows.Controls.Button;
+      if (btn != null) {
+        DataRowView row = btn.DataContext as DataRowView;
+        if (row != null) {
+          System.Windows.Media.Color? color = row["Color"] as System.Windows.Media.Color?;
+          if (color == null) {
+            color = System.Windows.Media.Colors.Black;
+          }
+          System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+          colorDialog.Color = System.Drawing.Color.FromArgb(color.Value.A, color.Value.R, color.Value.G, color.Value.B);
+          if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+            System.Drawing.Color newColor = colorDialog.Color;
+            row["Color"] = System.Windows.Media.Color.FromArgb(newColor.A, newColor.R, newColor.G, newColor.B);
+            btn.GetBindingExpression(DataContextProperty)?.UpdateTarget();
+          }
+        }
+      }
+    }
+
+    private void AmbientWindowsDataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e) {
+      DataRow newRow = Store.Positions.SelectedPosition?.ambientWindows.NewRow();
+      newRow["Active"] = true;
+      newRow["Color"] = System.Windows.Media.Colors.Black;
+      e.NewItem = newRow;
+    }
+
+    private void AmbientWindowsDataGrid_InitializingNewItem(object sender, InitializingNewItemEventArgs e) {
+      DataRowView row = e.NewItem as DataRowView;
+      if (row != null) {
+        row["Active"] = true;
+        row["Color"] = System.Windows.Media.Colors.Black;
       }
     }
   }

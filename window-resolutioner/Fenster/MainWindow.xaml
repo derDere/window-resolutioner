@@ -5,12 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="clr-namespace:window_resolutioner.Controls"
         xmlns:Klassen="clr-namespace:window_resolutioner.Klassen"
+        xmlns:Media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
         x:Class="window_resolutioner.MainWindow"
         mc:Ignorable="d"
         DataContext="{Binding Store, ElementName=Win}" UseLayoutRounding="True"
         Title="Window Resolutioner"
         Background="#FFFCFCFC"
         Height="600" Width="1200" WindowStartupLocation="CenterScreen" Icon="/Fenster/icon.ico" Topmost="True">
+    <Window.Resources>
+        <DataTemplate x:Key="ColorTemplate" DataType="Media:Color">
+            <Button Name="ColorBtn" Click="ColorButton_Click" DataContext="{Binding}">
+                <Border Width="32" Height="16">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding ElementName=ColorBtn, Path=DataContext.Color}"/>
+                    </Border.Background>
+                </Border>
+            </Button>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -23,10 +35,12 @@
             <ColumnDefinition Width="1*" MinWidth="100"/>
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="300" MinWidth="100"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="400" MinWidth="100"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.ColumnSpan="5" Fill="#F0F0F0"/>
-        <Rectangle Grid.Row="2" Grid.ColumnSpan="5" Fill="#F0F0F0"/>
+        <Rectangle Grid.ColumnSpan="7" Fill="#F0F0F0"/>
+        <Rectangle Grid.Row="2" Grid.ColumnSpan="7" Fill="#F0F0F0"/>
         
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/applications_blue.png"/>
@@ -39,6 +53,11 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">
             <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/equalizer__pencil.png"/>
             <ContentControl>Properties</ContentControl>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="6">
+            <Image UseLayoutRounding="True" Width="16" Height="16" Margin="0 0 10 0" Source="/Resources/table.png" VerticalAlignment="Center"/>
+            <ContentControl VerticalAlignment="Center">Ambient windows</ContentControl>
+            <Button ToolTip="What are ambient windows?" Margin="10 0 0 0" VerticalAlignment="Center" Height="20" Width="20">?</Button>
         </StackPanel>
 
         <ListBox x:Name="OpenWindowsLB" Grid.Row="1" ItemsSource="{Binding WindowDatas.Windows}" SelectedIndex="{Binding WindowDatas.SelectedIndex}">
@@ -73,6 +92,22 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Controls:WindowEditor x:Name="WindowEditor" Grid.Column="4" Grid.Row="1" DisplayChanged="WindowEditor_DisplayChanged"/>
+
+        <DataGrid
+            x:Name="AmbientWindowsDataGrid"
+            ItemsSource="{Binding}"
+            Grid.Column="6"
+            Grid.Row="1"
+            CanUserAddRows="True"
+            CanUserDeleteRows="True"
+            CanUserReorderColumns="False"
+            CanUserResizeRows="False"
+            IsTextSearchEnabled="True"
+            AutoGenerateColumns="True"
+            AutoGeneratingColumn="AmbientWindowsDataGrid_AutoGeneratingColumn"
+            AddingNewItem="AmbientWindowsDataGrid_AddingNewItem"
+            InitializingNewItem="AmbientWindowsDataGrid_InitializingNewItem">
+        </DataGrid>
 
         <StackPanel Grid.Column="1" Margin="7 0" VerticalAlignment="Center" Grid.Row="1">
             <StackPanel.Resources>
@@ -115,6 +150,7 @@
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" ResizeBehavior="PreviousAndNext"/>
         <GridSplitter Width="4" Grid.Column="1" Grid.Row="1" ResizeBehavior="PreviousAndNext"/>
         <GridSplitter Width="4" Grid.Column="3" Grid.Row="1" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Center"/>
+        <GridSplitter Width="4" Grid.Column="5" Grid.Row="1" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Center"/>
         
     </Grid>
 </Window>

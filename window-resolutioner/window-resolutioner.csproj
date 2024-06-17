@@ -25,6 +25,7 @@
     <None Remove="Resources\drive_download.png" />
     <None Remove="Resources\drive_upload.png" />
     <None Remove="Resources\equalizer__pencil.png" />
+    <None Remove="Resources\table.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,7 @@
     <Resource Include="Resources\drive_download.png" />
     <Resource Include="Resources\drive_upload.png" />
     <Resource Include="Resources\equalizer__pencil.png" />
+    <Resource Include="Resources\table.png" />
   </ItemGroup>
 
   <ItemGroup>
