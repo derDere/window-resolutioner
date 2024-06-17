@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 using IO = System.IO;
 using MessageBox = System.Windows.MessageBox;
 
@@ -138,12 +139,7 @@ namespace window_resolutioner.Klassen {
         handledAmbientWindows = true;
         string currentWindows = "";
         foreach (System.Windows.Forms.Form f in ambientWindowList) {
-          string colorStr = "#";
-          colorStr += ((int)Math.Round(f.Opacity * 255)).ToString("X2");
-          colorStr += f.BackColor.R.ToString("X2");
-          colorStr += f.BackColor.G.ToString("X2");
-          colorStr += f.BackColor.B.ToString("X2");
-          currentWindows += $"{f.Text},{f.Top},{f.Left},{f.Width},{f.Height},{colorStr},{(f.TopMost ? 1 : 0)};";
+          currentWindows += (string)f.Tag;
         }
         string targetWindows = "";
         if (showAmbientWindows) {
@@ -169,10 +165,9 @@ namespace window_resolutioner.Klassen {
         if (currentWindows == targetWindows) {
           return;
         }
-        foreach (System.Windows.Forms.Form f in ambientWindowList) {
+        foreach (System.Windows.Forms.Form f in ambientWindowList.ToArray()) {
           f.Close();
         }
-        ambientWindowList.Clear();
         if (showAmbientWindows) {
           foreach (DataRow row in ambientWindows.Rows) {
             bool active = (bool)row["Active"];
@@ -184,8 +179,15 @@ namespace window_resolutioner.Klassen {
               int Height = (int)row["Height"];
               System.Windows.Media.Color Color = (System.Windows.Media.Color)row["Color"];
               bool TopMost = (bool)row["TopMost"];
+              string colorStr = "#";
+              colorStr += Color.A.ToString("X2");
+              colorStr += Color.R.ToString("X2");
+              colorStr += Color.G.ToString("X2");
+              colorStr += Color.B.ToString("X2");
+              string winStr = $"{Name},{X},{Y},{Width},{Height},{colorStr},{(TopMost ? 1 : 0)};";
               System.Windows.Forms.Form f = new System.Windows.Forms.Form();
               f.Text = Name;
+              f.Tag = winStr;
               f.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
               f.Top = Y;
               f.Left = X;
@@ -199,6 +201,9 @@ namespace window_resolutioner.Klassen {
               f.Show();
               f.Activated += (s, e) => {
                 waitAndSelectWindow(activeWindow);
+              };
+              f.FormClosed += (s, e) => {
+                if (ambientWindowList.Contains(s)) ambientWindowList.Remove((System.Windows.Forms.Form)s);
               };
               ambientWindowList.Add(f);
             }

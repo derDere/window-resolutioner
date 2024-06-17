@@ -104,7 +104,7 @@ namespace window_resolutioner {
         }
       });
       if (!handledAmbientWindows) {
-        foreach (System.Windows.Forms.Form f in Position.ambientWindowList) {
+        foreach (System.Windows.Forms.Form f in Position.ambientWindowList.ToArray()) {
           f.Close();
         }
       }
